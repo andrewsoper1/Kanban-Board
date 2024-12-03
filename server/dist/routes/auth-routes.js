@@ -9,15 +9,15 @@ export const login = async (req, res) => {
         where: { username },
     });
     if (!user) {
-        return res.status(401).json({ message: 'Authentication failed' });
+        return res.status(401).json({ message: 'Username is not valid' });
     }
     ;
     const passwordIsValid = await bcrypt.compare(password, user.password);
     if (!passwordIsValid) {
-        return res.status(401).json({ message: 'Authentication failed' });
+        return res.status(401).json({ message: 'Incorrect Password please try again' });
     }
     ;
-    const secretKey = process.env.SECRET_KEY || '';
+    const secretKey = process.env.JWT_SECRET_KEY || '';
     const token = jwt.sign({ username }, secretKey, { expiresIn: '1h' });
     return res.json({ token });
 };
